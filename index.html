@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Embedder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 50px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #videoContainer {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    iframe {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>YouTube Video Embedder</h2>
+    <input type="text" id="youtubeUrl" placeholder="Paste a YouTube video link">
+    <button id="embedBtn">Embed Video</button>
+
+    <div id="videoContainer"></div>
+  </div>
+
+  <script>
+    function extractVideoID(url) {
+      const regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const match = url.match(regex);
+      return match ? match[1] : null;
+    }
+
+    function embedVideo() {
+      const url = document.getElementById("youtubeUrl").value.trim();
+      const videoID = extractVideoID(url);
+      const container = document.getElementById("videoContainer");
+
+      if (videoID) {
+        container.innerHTML = `
+          <iframe width="560" height="315"
+                  src="https://www.youtube.com/embed/${videoID}"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+          </iframe>`;
+      } else {
+        container.innerHTML = '<p class="error">Invalid YouTube URL. Please try again.</p>';
+      }
+    }
+
+    // ✅ Attach event listener properly
+    document.getElementById("embedBtn").addEventListener("click", embedVideo);
+  </script>
+
+</body>
+</html>
