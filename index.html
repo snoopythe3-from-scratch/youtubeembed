@@ -3,37 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <title>YouTube Video Embedder</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      padding: 40px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #3498db;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #videoContainer {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    iframe {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .error {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Enter YouTube Video URL</h2>
-  <input type="text" id="youtubeUrl" placeholder="Enter YouTube link here">
-  <button onclick="embedVideo()">Embed Video</button>
 
-  <div id="videoContainer" style="margin-top:20px;"></div>
+  <div class="container">
+    <h2>YouTube Video Embedder</h2>
+    <input type="text" id="youtubeUrl" placeholder="Paste your YouTube link here">
+    <button onclick="embedVideo()">Embed Video</button>
+
+    <div id="videoContainer"></div>
+  </div>
 
   <script>
     function extractVideoID(url) {
-      const regex = /(?:youtube\.com.*(?:\?|&)v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+      const regex = /(?:youtube\.com\/(?:.*v=|v\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
       const match = url.match(regex);
       return match ? match[1] : null;
     }
 
     function embedVideo() {
-      const url = document.getElementById('youtubeUrl').value;
+      const url = document.getElementById('youtubeUrl').value.trim();
       const videoID = extractVideoID(url);
+      const container = document.getElementById('videoContainer');
 
       if (videoID) {
-        const iframe = `<iframe width="560" height="315"
-                             src="https://www.youtube.com/embed/${videoID}"
-                             frameborder="0"
-                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                             allowfullscreen>
-                        </iframe>`;
-        document.getElementById('videoContainer').innerHTML = iframe;
+        container.innerHTML = `
+          <iframe width="560" height="315"
+                  src="https://www.youtube.com/embed/${videoID}"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+          </iframe>`;
       } else {
-        document.getElementById('videoContainer').innerHTML = "<p style='color:red;'>Invalid YouTube URL.</p>";
+        container.innerHTML = `<p class="error">Invalid YouTube URL. Please try again.</p>`;
       }
     }
   </script>
+
 </body>
 </html>
